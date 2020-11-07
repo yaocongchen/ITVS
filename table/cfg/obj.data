@@ -1,0 +1,5 @@
+classes =3
+train = /home/yaocong/table/cfg/train.txt
+valid = /home/yaocong/table/cfg/test.txt
+names = /home/yaocong/table/cfg/obj.names
+backup = /home/yaocong/table/cfg/weights/

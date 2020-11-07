@@ -1,0 +1,18 @@
+訓練
+jetsontx2@jetsontx2-desktop:~/darknet-master$ ./darknet detector train /home/yao-cong/ball/cfg/obj.data /home/yao-cong/money/cfg/yolov3-tiny.cfg darknet53.conv.74
+測試圖片
+jetsontx2@jetsontx2-desktop:~/darknet-master$ ./darknet detector test /home/jetsontx2/money/cfg/obj.data /home/jetsontx2/money/cfg/yolov3-tiny.cfg /home/jetsontx2/ball/cfg/weights/yolov3-tiny_900.weights /home/jetsontx2/50.png
+測試影片
+jetsontx2@jetsontx2-desktop:~/darknet-master$ ./darknet detector demo /home/jetsontx2/ball/cfg/obj.data /home/jetsontx2/ball/cfg/yolov3-tiny.cfg /home/jetsontx2/ball/cfg/weights/yolov3-tiny_final.weights /home/jetsontx2/ball/05.mp4
+
+label.py使用方法
+python3 label.py >train.txt
+
+TX2 查看gpu 指令
+cd gpuGraphTX
+python3 gpuGraph.py
+
+開標記程式
+./linux_mark.sh
+
+

@@ -1,0 +1,5 @@
+classes =1
+train = /home/yaocong/ball/cfg/train.txt
+valid = /home/yaocong/ball/cfg/test.txt
+names = /home/yaocong/ball/cfg/obj.names
+backup = /home/yaocong/ball/cfg/weights/
