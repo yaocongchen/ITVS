@@ -726,17 +726,23 @@ def count():
         pre_FileSize=get_FileSize('ball.txt')
 
 
+def check_job():
+    os.system("./darknet detector demo /home/yaocong/table/cfg/obj.data /home/yaocong/table/cfg/yolov4.cfg /home/yaocong/table/cfg/weights/yolov4_final.weights /home/yaocong/ball/video11.mp4 -dont_show -ext_output < /home/yaocong/table/cfg/train.txt > table.txt -gpus 0")
+    #sleep(0.1)
 def thread_job():
-    os.system("./darknet detector demo /home/yaocong/topicnew/ball/obj.data /home/yaocong/topicnew/ball/yolov4.cfg /home/yaocong/topicnew/ball/weights/yolov4_final.weights /home/yaocong/topicnew/video11.mp4 -ext_output < /home/yaocong/topicnew/ball/train.txt > ball.txt -gpus 0")   #直接看到執行結果
+    os.system("./darknet detector demo /home/yaocong/ball/cfg/obj.data /home/yaocong/ball/cfg/yolov4.cfg /home/yaocong/ball/cfg/weights/yolov4_final.weights /home/yaocong/ball/video11.mp4 -ext_output < /home/yaocong/ball/cfg/train.txt > ball.txt -gpus 0,1,2")   #直接看到執行結果
     #sleep(0.1)
 def T2_job():
     count()
     #sleep(0.5)
 def main():
-    added_thread = threading.Thread(target=thread_job,name='T1')
-    thread2= threading.Thread(target=T2_job,name='T2')
+    check_thread = threading.Thread(target=check_job,name='T1')
+    added_thread = threading.Thread(target=thread_job,name='T2')
+    thread2= threading.Thread(target=T2_job,name='T3')
+    check_thread.start()
     added_thread.start()
     thread2.start()
+    check_thread.join()
     added_thread.join()
     thread2.join()
     print('all done\n')
