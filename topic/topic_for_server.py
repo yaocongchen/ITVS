@@ -4,15 +4,30 @@ import os
 from time import sleep
 import ctypes
 import threading
+#import pyttsx3
 #import serial
 #from gtts import gTTS
 #from pygame import mixer
 #import tempfile
 
-#ll = ctypes.cdll.LoadLibrary
-#lib = ll("./libpycall.so")
-#lib.draw_detections_v3(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, int ext_output)
+'''
+# 初始化
+engine = pyttsx3.init()
 
+voices = engine.getProperty('voices')
+# 語速控制
+rate = engine.getProperty('rate')
+print(rate)
+engine.setProperty('rate', rate-20)
+
+# 音量控制
+volume = engine.getProperty('volume')
+print(volume)
+engine.setProperty('volume', volume-0.25)
+
+en_voice_id = "english"
+zh_voice_id = "zh"
+'''
 '''
 #儲存音檔
 tts = gTTS(text='上方得分', lang ='zh-tw')
@@ -95,6 +110,82 @@ def say():
         speak(str(num_l))
         sleep(2) 
 '''
+'''
+if button == 1:
+    engine.setProperty('voice', en_voice_id)
+    count=True    
+
+elif button== 2:
+    engine.setProperty('voice', zh_voice_id)
+    count =True
+'''
+'''
+#報分函數
+def say():
+    if speak_start == 1 : 
+        if button == 1:
+            engine.say("A"+str(num_l))
+            sleep(1)
+            #speak('比')
+            #sleep(1)
+            engine.say("B"+str(num_r))
+            sleep(2)
+        elif button == 2:
+            engine.say("A方"+str(num_l)+"分")
+            sleep(2)
+            #speak('比')
+            #sleep(1)
+            engine.say("B方"+str(num_r)+"分")
+            sleep(2)
+    elif speak_start == 2 :
+        if button == 1:
+            engine.say("B"+str(num_r))
+            sleep(1)
+            #speak('比')
+            #sleep(1)
+            engine.say("A"+str(num_l))
+            sleep(2)
+        elif button == 2:
+            engine.say("B方"+str(num_r)+"分")
+            sleep(2)
+            #speak('比')
+            #sleep(1)
+            engine.say("A方"+str(num_l)+"分")
+            sleep(2) 
+    engine.runAndWait()
+def saydeuce():
+    if button == 1:
+        engine.say("deuce")
+        sleep(0.5)
+    elif button ==2:
+        engine.say("平局")
+        sleep(2)
+    engine.runAndWait()
+def saygamepoint_left():
+    if button == 1:
+        engine.say("A gamepoin")
+        sleep(1)
+    elif button ==2:
+        engine.say("A方局末")
+        sleep(4)
+    engine.runAndWait()
+def saygamepoint_right():
+    if button == 1:
+        engine.say("B gamepoin")
+        sleep(1)
+    elif button ==2:
+        engine.say("B方局末")
+        sleep(2)
+    engine.runAndWait()
+def sayend():
+    if button == 1:
+        engine.say("End of this round")
+        sleep(1)
+    elif button ==2:
+        engine.say("此局結束")
+        sleep(2)
+    engine.runAndWait()
+'''
 
 #在.txt印出終端機產生的資料
 class Logger(object):
@@ -150,6 +241,11 @@ pre_action_y=0                                          #設定過去球體高�
 now_action_y=0                                          #設定現在球體高度狀態變數
 UP_TO_DOWN=1
 DOWN_TO_UP=2
+voice_left=1
+voice_right=2
+pre_num_l=0
+pre_num_r=0
+speak_start=0
 start_bonuce_left=0
 start_bounce_right=0
 bounce_left=0                                           #設定左彈跳變數
@@ -310,6 +406,11 @@ def main_program(text):
     global now_action_y                                         #設定現在球體高度狀態變數
     global UP_TO_DOWN
     global DOWN_TO_UP
+    global voice_left
+    global voice_right
+    global pre_num_l
+    global pre_num_r
+    global speak_start
     global start_bonuce_left
     global start_bounce_right
     global bounce_left                                           #設定左彈跳變數
@@ -566,6 +667,57 @@ def main_program(text):
     #pre_finish = finish
     #pre_left_x = now_left_x
     #pre_right_x= now_right_x
+    if num_l == 10 and num_r < 10 and speak_stop == False:
+        #saygamepoint_left()
+        speak_stop = True
+    elif num_r == 10 and num_l < 10 and speak_stop == False:
+        #saygamepoint_right()
+        speak_stop = True
+    elif num_l >= 10 and num_r >= 10 and num_l == num_r and speak_stop == False:
+        #saydeuce()
+        print("saydeuce")
+        speak_stop = True
+    elif num_l > 10 and num_l - num_r == 1 and speak_stop == False:
+        #saygamepoint_left()
+        speak_stop = True
+    elif num_r > 10 and num_r - num_l == 1 and speak_stop == False:
+        #saygamepoint_right()
+        speak_stop = True
+
+    if  num_l != pre_num_l or num_r != pre_num_r:
+        speak_stop = False        
+
+    pre_num_l = num_l
+    pre_num_r = num_r
+
+    if num_l == 11 and num_r < 10:
+        num_l=0
+        num_r=0
+        #sayend()
+        print("此局結束，請按Enter繼續下局")
+        input()
+        #sys.exit()
+    elif num_r == 11 and num_l < 10:
+        num_l=0
+        num_r=0
+        #sayend()
+        print("此局結束，請按Enter繼續下局")
+        input()
+        #sys.exit()
+    elif num_l > 10 and num_l - num_r ==2:
+        num_l=0
+        num_r=0
+        #sayend()
+        print("此局結束，請按Enter繼續下局")
+        input()
+        #sys.exit()
+    elif num_r > 10 and num_r - num_l ==2:
+        num_l=0
+        num_r=0
+        #sayend()
+        print("此局結束，請按Enter繼續下局")
+        input()
+        #sys.exit()
     return  
 
 #f.close()                                                      #關閉所讀取檔案
@@ -609,10 +761,10 @@ def count():
         pre_FileSize=get_FileSize('ball.txt')
 
 def check_job():
-    os.system("./darknet detector demo /home/yaocong/table/cfg/obj.data /home/yaocong/table/cfg/yolov4.cfg /home/yaocong/table/cfg/weights/yolov4_final.weights /home/yaocong/ball/video11.mp4 -dont_show -ext_output < /home/yaocong/table/cfg/train.txt > table.txt -gpus 0")
+    os.system("./darknet detector demo /home/yaocong/table/cfg/obj.data /home/yaocong/table/cfg/yolov4.cfg /home/yaocong/table/cfg/weights/yolov4_final.weights /home/yaocong/ball/video10.mp4 -dont_show -ext_output < /home/yaocong/table/cfg/train.txt > table.txt -gpus 0")
     #sleep(0.1)
 def thread_job():
-    os.system("./darknet detector demo /home/yaocong/ball/cfg/obj.data /home/yaocong/ball/cfg/yolov4.cfg /home/yaocong/ball/cfg/weights/yolov4_final.weights /home/yaocong/ball/video11.mp4 -ext_output < /home/yaocong/ball/cfg/train.txt > ball.txt -gpus 0,1,2")   #直接看到執行結果
+    os.system("./darknet detector demo /home/yaocong/ball/cfg/obj.data /home/yaocong/ball/cfg/yolov4.cfg /home/yaocong/ball/cfg/weights/yolov4_final.weights /home/yaocong/ball/video10.mp4 -ext_output < /home/yaocong/ball/cfg/train.txt > ball.txt -gpus 0,1,2")   #直接看到執行結果
     #sleep(0.1)
 def T2_job():
     sleep(0.5)
