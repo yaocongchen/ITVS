@@ -13,4 +13,4 @@ topic_for_server.py is server final version.
 
 topic_pyttsx3_for_TX2 _no_check.py is no check table position.
 
-If use the code you need install pyttsx3 , espeak and pyserial.
+If use the code , you need install pyttsx3 , espeak and pyserial.
