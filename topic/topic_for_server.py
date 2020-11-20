@@ -354,7 +354,7 @@ for x in range(1,lines):                                #設定讀取區間，�
         #print ("tableheight:",tableheight)
         #print ("avg_tableheight:",avg_tableheight)
 
-        table_height=avg_tabletop_y                     #設定球網高度
+        table_height=avg_tabletop_y-avg_tableheight                     #設定球網高度
         table_width_l=avg_tableleft_x                   #設定球網左側邊緣
         table_width_r=avg_tableleft_x+avg_tablewidth    #設定球網右側邊緣
 #讀取球體運動檔座標值
@@ -526,14 +526,17 @@ def main_program(text):
         
             #設定低於球桌旗標，避免重複判分      
         is_lower=False                                          #剛開始狀態為False                  
-        if pre_y < table_middle_height and now_y > table_middle_height:       #如果過去球體比球桌高但現在的球體比球桌低
+        if pre_y < table_height and now_y > table_height:       #如果過去球體比球桌高但現在的球體比球桌低
             print("低於桌面")
             is_lower=True                                       #狀態轉為True
-
+	
+        #ball_in = False
+        #if now_x > table_width_l or now_x < table_width_r:
+            #ball_in = True
 
         if start == False and finish == False:
             print(start)
-            if now_action_x==LEFT_TO_RIGHT:            #由左往右
+            if now_action_x==LEFT_TO_RIGHT :            #由左往右
                 if  bounce_left == 1:                               #左側彈跳
                     num_r+=1
                     print("左側彈跳計分")
@@ -545,6 +548,7 @@ def main_program(text):
                     bounce_left=0 
                     bounce_right=0 
                     finish = True
+                    #ball_in = False
                 elif  bounce_left == 0 and is_lower == True and now_x < net_x:                              #球低於球桌，is_lower轉True
                     num_r+=1
                     print("左側落地計分")
@@ -557,6 +561,7 @@ def main_program(text):
                     bounce_left=0 
                     bounce_right=0  
                     finish = True
+                    #ball_in = False
                 elif bounce_right == 2:
                     num_l+=1
                     print("右側彈跳兩次計分")
@@ -568,6 +573,7 @@ def main_program(text):
                     bounce_left=0 
                     bounce_right=0  
                     finish = True
+                    #ball_in = False
                 elif bounce_right==1 and is_lower == True and now_x > net_x:
                     num_l+=1
                     print("右側彈跳1次並落地計分")
@@ -580,6 +586,7 @@ def main_program(text):
                     bounce_left=0 
                     bounce_right=0  
                     finish = True
+                    #ball_in = False
                 elif bounce_left == 0 and bounce_right ==0 and now_x > net_x and is_lower == True:
                     num_r+=1
                     print("右側與左側皆未發生彈跳且落地計分")
@@ -592,6 +599,7 @@ def main_program(text):
                     bounce_left=0 
                     bounce_right=0  
                     finish = True
+                    #ball_in = False
             elif now_action_x==RIGHT_TO_LEFT:          #由右往左
                 if bounce_right == 1:                               #右側彈跳
                     num_l+=1
@@ -603,7 +611,8 @@ def main_program(text):
                     start_bounce_right=0
                     bounce_left=0 
                     bounce_right=0    
-                    finish = True              
+                    finish = True
+                    #ball_in = False              
                 elif bounce_right == 0 and is_lower == True and now_x > net_x:                              #球低於球桌，is_lower轉True
                     num_l+=1
                     print("右側落地計分")
@@ -616,6 +625,7 @@ def main_program(text):
                     bounce_left=0 
                     bounce_right=0 
                     finish = True
+                    #ball_in = False
                 elif bounce_left == 2:
                     num_r+=1
                     print("左彈跳兩次計分")
@@ -627,6 +637,7 @@ def main_program(text):
                     bounce_left=0
                     bounce_right=0  
                     finish = True
+                    #ball_in = False
                 elif bounce_left == 1 and is_lower == True and now_x < net_x:
                     num_r+=1
                     print("左側彈跳1次並落地計分")
@@ -638,7 +649,8 @@ def main_program(text):
                     start_bounce_right=0
                     bounce_left=0 
                     bounce_right=0  
-                    finish = True 
+                    finish = True
+                    #ball_in = False 
                 elif bounce_right == 0 and bounce_left ==0 and now_x < net_x and is_lower ==True:
                     num_l+=1
                     print("右側與左側皆未發生彈跳且落地計分")
@@ -651,6 +663,7 @@ def main_program(text):
                     bounce_left=0 
                     bounce_right=0  
                     finish = True
+                    #ball_in = False
             #while ser.in_waiting:
             #mcu_feedback = ser.readline().decode()  # 接收回應訊息並解碼
             #print('控制板回應：', mcu_feedback)
@@ -764,6 +777,7 @@ def check_job():
     os.system("./darknet detector demo /home/yaocong/table/cfg/obj.data /home/yaocong/table/cfg/yolov4.cfg /home/yaocong/table/cfg/weights/yolov4_final.weights /home/yaocong/ball/video10.mp4 -dont_show -ext_output < /home/yaocong/table/cfg/train.txt > table.txt -gpus 0")
     #sleep(0.1)
 def thread_job():
+    sleep(0.1)
     os.system("./darknet detector demo /home/yaocong/ball/cfg/obj.data /home/yaocong/ball/cfg/yolov4.cfg /home/yaocong/ball/cfg/weights/yolov4_final.weights /home/yaocong/ball/video10.mp4 -ext_output < /home/yaocong/ball/cfg/train.txt > ball.txt -gpus 0,1,2")   #直接看到執行結果
     #sleep(0.1)
 def T2_job():
