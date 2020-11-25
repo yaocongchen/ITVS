@@ -730,6 +730,7 @@ def check_job():
     os.system("./darknet detector demo /home/yaocong/table/cfg/obj.data /home/yaocong/table/cfg/yolov4.cfg /home/yaocong/table/cfg/weights/yolov4_final.weights /home/yaocong/ball/video11.mp4 -dont_show -ext_output < /home/yaocong/table/cfg/train.txt > table.txt -gpus 0")
     #sleep(0.1)
 def thread_job():
+    sleep(0.1)
     os.system("./darknet detector demo /home/yaocong/ball/cfg/obj.data /home/yaocong/ball/cfg/yolov4.cfg /home/yaocong/ball/cfg/weights/yolov4_final.weights /home/yaocong/ball/video11.mp4 -ext_output < /home/yaocong/ball/cfg/train.txt > ball.txt -gpus 0,1,2")   #直接看到執行結果
     #sleep(0.1)
 def T2_job():
